@@ -7,7 +7,7 @@ router.get('/allusers',async (req, res) => {
     try {
         const authorization = req.headers.authorization;
         if (authorization) {
-            const q = 'SELECT email FROM users'
+            const q = 'SELECT email FROM users_active'
             db.query(q, async (err, data) => {
                 if (err) {
                     res.status(400).json({ message: err.message });
@@ -23,7 +23,7 @@ router.get('/allusers',async (req, res) => {
 
 router.post('/createuser',async (req, res) => {
     try {
-        const sameEmailNum = `SELECT email FROM users WHERE email="${req.body.email}"`;
+        const sameEmailNum = `SELECT email FROM users_active WHERE email="${req.body.email}"`;
 
         db.query(sameEmailNum, async (err, data) => {
             if (err) {
@@ -32,7 +32,7 @@ router.post('/createuser',async (req, res) => {
 
                 if (data.length === 0) {
 
-                    const sqlPost = `INSERT INTO users (email, pssw) VALUES ('${req.body.email}', '${req.body.pssw}')`
+                    const sqlPost = `INSERT INTO users_active (email, pssw) VALUES ('${req.body.email}', '${req.body.pssw}')`
                     db.query(sqlPost, (err, data) => {
                         if (err) {
                             console.log("Error: ", err, ". An error occurred");
@@ -58,13 +58,13 @@ router.post('/createuser',async (req, res) => {
 router.post('/login',async (req, res) => {
     try {
         const inputPssw = req.body.pssw;
-        const sameEmailNum = `SELECT email FROM users WHERE email="${req.body.email}"`;
+        const sameEmailNum = `SELECT email FROM users_active WHERE email="${req.body.email}"`;
         db.query(sameEmailNum, (err, data) => {
             if (err) {
                 console.log("Error: ", err, ". An error occurred");
             } else {
                 if (data.length === 1) {
-                    const userPssw = `SELECT pssw FROM users WHERE email="${req.body.email}"`;
+                    const userPssw = `SELECT pssw FROM users_active WHERE email="${req.body.email}"`;
                     db.query(userPssw, async (err, data2) => {
                         if (err) {
                             console.log("Error: ", err, ". An error occurred");
