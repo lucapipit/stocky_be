@@ -1,40 +1,23 @@
-const express = require('express');
-const app = express();
+import express from "express";
 import cors from 'cors';
-const dotenv = require('dotenv');
-import mysql from 'mysql';
-import ActiveUser from './routes/ActiveUser.js';
-import Annunci from './routes/Annunci.js';
-import Professional from './routes/Professional.js';
-
+const app = express();
+//routes
+import activeUsers from './routes/activeUsers.js';
+import announcements from './routes/announcements.js';
+import professionals from './routes/professionals.js';
 
 const port = 5050;
 
-dotenv.config();
-app.use(cors());
 app.use(express.json());
-
-
-//db connection
-const db = mysql.createConnection({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PSSW,
-    database: process.env.DB_NAME,
-   insecureAuth : true
-
-});
-
+app.use(cors());
 
 //routes
-app.use('/', ActiveUser);
-app.use('/', Annunci);
-app.use('/', Professional);
+app.use('/', activeUsers);
+app.use('/', announcements);
+app.use('/', professionals);
 
 
-app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
-});
+app.listen(port, () => {console.log(`Server running on port ${port}`)});
 
 
 

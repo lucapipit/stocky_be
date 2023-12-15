@@ -1,9 +1,9 @@
-import React from 'react'
-const express = require('express');
+import express from "express";
+import db from "../db.js";
+import jwt from "jsonwebtoken";
 const router = express.Router();
-const jwt = require('jsonwebtoken');
 
-router.get('/allUsers',async (req, res) => {
+router.get('/allusers',async (req, res) => {
     try {
         const authorization = req.headers.authorization;
         if (authorization) {
@@ -21,7 +21,7 @@ router.get('/allUsers',async (req, res) => {
     }
 });
 
-router.post('/createUser',async (req, res) => {
+router.post('/createuser',async (req, res) => {
     try {
         const sameEmailNum = `SELECT email FROM users WHERE email="${req.body.email}"`;
 

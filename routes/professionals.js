@@ -1,10 +1,7 @@
-const express = require('express');
+import express from "express";
+import db from "../db.js";
+import jwt from "jsonwebtoken";
 const router = express.Router();
-const jwt = require('jsonwebtoken');
-
-
-
-
 
 router.get('/professionals',async (req, res) => {
     const authorization = req.headers.authorization;
@@ -36,7 +33,7 @@ router.get('/professional/:id',async (req, res) => {
 }
 );
 
-router.post('/professional',async (req, res) => {
+router.post('/createprofessional',async (req, res) => {
     try {
         const sqlPost = `INSERT INTO professional
         (name, surname, email, password, phone, address, city, cap, province, country, role, description, profile_picture) 
