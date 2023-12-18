@@ -32,18 +32,28 @@ router.post('/signin', async (req, res) => {
 
                 if (data.length === 0) {
 
-                    const sqlPost = `INSERT INTO users_active SET 
-            
-                        companyName = "${req.body.companyName}", 
-                        email = "${req.body.email}", 
-                        pssw = "${req.body.pssw}", 
-                        country = "${req.body.country}", 
-                        address = "${req.body.address}", 
-                        city = "${req.body.city}", 
-                        zipCode = "${req.body.zipCode}", 
-                        phone = "${req.body.phone}", 
-                        manufacturer = "${req.body.manufacturer}",
-                        dealer = "${req.body.dealer}",`
+                    const sqlPost = `INSERT INTO users_active (
+                            companyName,
+                            email,
+                            pssw,
+                            country,
+                            address,
+                            city,
+                            zipCode,
+                            phone,
+                            manufacturer,
+                            dealer
+                            )VALUES (
+                            "${req.body.companyName}", 
+                            "${req.body.email}", 
+                            "${req.body.pssw}",
+                            "${req.body.country}", 
+                            "${req.body.address}", 
+                            "${req.body.city}", 
+                            "${req.body.zipCode}", 
+                            "${req.body.phone}", 
+                            "${req.body.manufacturer}", 
+                            "${req.body.dealer}")`;
 
                     db.query(sqlPost, (err, data) => {
                         if (err) {
@@ -102,5 +112,40 @@ router.post('/login', async (req, res) => {
         console.error(error)
     }
 });
+
+router.patch('/editaccount', async (req, res) => {
+    try {
+        const authorization = req.headers.authorization;
+        if (authorization) {
+            const sqlPost = `UPDATE users_active SET
+                        companyName = "${req.body.companyName}", 
+                        country = "${req.body.country}", 
+                        address = "${req.body.address}", 
+                        city = "${req.body.city}", 
+                        zipCode = "${req.body.zipCode}", 
+                        phone = "${req.body.phone}", 
+                        manufacturer = "${req.body.manufacturer}",
+                        dealer = "${req.body.dealer}"
+                        WHERE 
+                        id=${req.body.id}`;
+
+            db.query(sqlPost, (err, data) => {
+                if (err) {
+                    console.log("Error: ", err, ". An error occurred");
+                    res.status(400).json({ message: err.message });
+                } else {
+                    console.log("Succesfully insert into db!");
+                    res.status(200).json({ message: "Account succesfully updated" });
+                }
+            })
+        }
+
+
+    } catch (error) {
+        console.error(error)
+    }
+}
+);
+
 
 export default router;

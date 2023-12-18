@@ -21,11 +21,42 @@ router.get('/allannouncements', async (req, res) => {
 
 router.post('/createannouncement', async (req, res) => {
     try {
-        const sqlPost = `INSERT INTO announcements 
-        (IdOwner,BrandName,ManufacturerName,ModelName, ProductSize, Description, TechnicalDetails,Pictures,Categoria, Price, Quantity,ExpirationRange,DataIns,DataMod) 
-       
-        VALUES ('${req.body.IdOwner}', '${req.body.BrandName}', '${req.body.ManufacturerName}', '${req.body.ModelName}', '${req.body.ProductSize}', 
-        '${req.body.Description}', '${req.body.TechnicalDetails}', '${req.body.Pictures}', '${req.body.Categoria}', '${req.body.Price}', '${req.body.Quantity}', '${req.body.ExpirationRange}', '${req.body.DataIns}', '${req.body.DataMod}')`
+        const sqlPost = `INSERT INTO announcements (
+            idOwner,
+            brandName,
+            manufacturerName,
+            modelName,
+            productSize,
+            description,
+            techDetail,
+            pics,
+            category,
+            price,
+            quantity,
+            expireDate,
+            textFocus,
+            picsFocus,
+            views,
+            posClick,
+            negClick)VALUES(
+            '${req.body.idOwner}', 
+            '${req.body.brandName}', 
+            '${req.body.manufacturerName}', 
+            '${req.body.modelName}', 
+            '${req.body.productSize}', 
+            '${req.body.description}', 
+            '${req.body.techDetail}', 
+            '${req.body.pics}', 
+            '${req.body.category}', 
+            '${req.body.price}', 
+            '${req.body.quantity}', 
+            '${req.body.expireDate}', 
+            '${req.body.textFocus}', 
+            '${req.body.picsFocus}', 
+            '${req.body.views}', 
+            '${req.body.posClick}', 
+            '${req.body.negClick}')`
+
         db.query(sqlPost, (err, data) => {
             if (err) {
                 console.log("Error: ", err, ". An error occurred");
@@ -41,9 +72,9 @@ router.post('/createannouncement', async (req, res) => {
 }
 );
 
-router.delete('/deleteannouncement', async (req, res) => {
+router.delete('/deleteannouncement/:id', async (req, res) => {
     try {
-        const sqlPost = `DELETE FROM announcements WHERE id = '${req.body.id}'`
+        const sqlPost = `DELETE FROM announcements WHERE id = '${req.params.id}'`
         db.query(sqlPost, (err, data) => {
             if (err) {
                 console.log("Error: ", err, ". An error occurred");
@@ -59,11 +90,24 @@ router.delete('/deleteannouncement', async (req, res) => {
 }
 );
 
-router.put('/updateannouncement', async (req, res) => {
+router.patch('/updateannouncement', async (req, res) => {
     try {
-        const sqlPost = `UPDATE announcements SET BrandName = '${req.body.BrandName}', ManufacturerName = '${req.body.ManufacturerName}', ModelName = '${req.body.ModelName}', ProductSize = '${req.body.ProductSize}', Description = '${req.body.Description}', 
-        TechnicalDetails = '${req.body.TechnicalDetails}', Pictures = '${req.body.Pictures}', Categoria = '${req.body.Categoria}', Price = '${req.body.Price}', Quantity = '${req.body.Quantity}', ExpirationRange = '${req.body.ExpirationRange}',
-         DataMod = '${req.body.DataMod}' WHERE id = '${req.body.id}'`
+        const sqlPost = `UPDATE announcements SET 
+        brandName = '${req.body.brandName}', 
+        manufacturerName = '${req.body.manufacturerName}', 
+        modelName = '${req.body.modelName}', 
+        productSize = '${req.body.productSize}', 
+        description = '${req.body.description}', 
+        techDetail = '${req.body.techDetail}', 
+        pics = '${req.body.pics}', 
+        category = '${req.body.category}', 
+        price = '${req.body.price}', 
+        quantity = '${req.body.quantity}', 
+        expireDate = '${req.body.expireDate}',
+        textFocus = '${req.body.textFocus}',
+        picsFocus = '${req.body.picsFocus}' 
+        WHERE 
+        id = '${req.body.id}'`
 
         db.query(sqlPost, (err, data) => {
             if (err) {
