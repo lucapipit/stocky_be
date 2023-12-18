@@ -3,7 +3,7 @@ import db from "../db.js";
 import jwt from "jsonwebtoken";
 const router = express.Router();
 
-router.get('/allusers',async (req, res) => {
+router.get('/allusers', async (req, res) => {
     try {
         const authorization = req.headers.authorization;
         if (authorization) {
@@ -21,7 +21,7 @@ router.get('/allusers',async (req, res) => {
     }
 });
 
-router.post('/createuser',async (req, res) => {
+router.post('/signin', async (req, res) => {
     try {
         const sameEmailNum = `SELECT email FROM users_active WHERE email="${req.body.email}"`;
 
@@ -32,7 +32,19 @@ router.post('/createuser',async (req, res) => {
 
                 if (data.length === 0) {
 
-                    const sqlPost = `INSERT INTO users_active (email, pssw) VALUES ('${req.body.email}', '${req.body.pssw}')`
+                    const sqlPost = `INSERT INTO users_active SET 
+            
+                        companyName = "${req.body.companyName}", 
+                        email = "${req.body.email}", 
+                        pssw = "${req.body.pssw}", 
+                        country = "${req.body.country}", 
+                        address = "${req.body.address}", 
+                        city = "${req.body.city}", 
+                        zipCode = "${req.body.zipCode}", 
+                        phone = "${req.body.phone}", 
+                        manufacturer = "${req.body.manufacturer}",
+                        dealer = "${req.body.dealer}",`
+
                     db.query(sqlPost, (err, data) => {
                         if (err) {
                             console.log("Error: ", err, ". An error occurred");
@@ -44,7 +56,7 @@ router.post('/createuser',async (req, res) => {
                     })
 
                 } else {
-                    res.status(401).json({ message: "Email already exists!", statusCode: 401 });
+                    res.status(401).json({ message: "pssw already exists!", statusCode: 401 });
                 };
             }
         })
@@ -55,7 +67,7 @@ router.post('/createuser',async (req, res) => {
 }
 );
 
-router.post('/login',async (req, res) => {
+router.post('/login', async (req, res) => {
     try {
         const inputPssw = req.body.pssw;
         const sameEmailNum = `SELECT email FROM users_active WHERE email="${req.body.email}"`;
