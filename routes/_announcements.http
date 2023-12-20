@@ -4,3 +4,21 @@ GET http://localhost:5050/allannouncements
 
 GET http://localhost:5050/professionals  
 Authorization: Bearer token
+
+
+########
+POST http://localhost:5050/signin
+
+     {
+    "companyName":"zeus",
+    "email":"zeus@gmail.com",
+    "pssw":"password",
+    "country":"italy",
+    "phone":"3887567245",
+    "address":"via puccini",
+    "city":"firenze",
+    "zipCode":"55100",
+    "manufacturer":"cls",
+    "dealer":"finer"
+    
+}
