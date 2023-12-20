@@ -2,6 +2,7 @@ import express from "express";
 import db from "../db.js";
 import jwt from "jsonwebtoken";
 import loginAuth from "../middlewares/loginAuth.js";
+import signinAuth from "../middlewares/signinAuth.js";
 const router = express.Router();
 
 router.get('/allusers', async (req, res) => {
@@ -11,18 +12,18 @@ router.get('/allusers', async (req, res) => {
             const q = 'SELECT email FROM users_active'
             db.query(q, async (err, data) => {
                 if (err) {
-                    res.status(400).json({ message: err.message });
+                    res.status(400).json({ message: err.message, statusCode: 400 });
                 } else {
                     res.status(200).json(data);
                 }
             })
         }
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        res.status(400).json({ message: error.message, statusCode: 400 });
     }
 });
 
-router.post('/signin', async (req, res) => {
+router.post('/signin', signinAuth, async (req, res) => {
     try {
         const sameEmailNum = `SELECT email FROM users_active WHERE email="${req.body.email}"`;
 
@@ -59,15 +60,15 @@ router.post('/signin', async (req, res) => {
                     db.query(sqlPost, (err, data) => {
                         if (err) {
                             console.log("Error: ", err, ". An error occurred");
-                            res.status(400).json({ message: err.message });
+                            res.status(400).json({ message: err.message, statusCode: 400 });
                         } else {
                             console.log("Succesfully insert into db!");
-                            res.status(200).json({ message: "User succesfully created" });
+                            res.status(200).json({ message: "User succesfully created", statusCode: 200 });
                         }
                     })
 
                 } else {
-                    res.status(401).json({ message: "pssw already exists!", statusCode: 401 });
+                    res.status(401).json({ message: "user already exists!", statusCode: 401 });
                 };
             }
         })
