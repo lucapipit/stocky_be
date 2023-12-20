@@ -1,6 +1,7 @@
 import express from "express";
 import db from "../db.js";
 import jwt from "jsonwebtoken";
+import loginAuth from "../middlewares/loginAuth.js";
 const router = express.Router();
 
 router.get('/allusers', async (req, res) => {
@@ -77,7 +78,8 @@ router.post('/signin', async (req, res) => {
 }
 );
 
-router.post('/login', async (req, res) => {
+router.post('/login', loginAuth, async (req, res) => {
+    
     try {
         const inputPssw = req.body.pssw;
         const sameEmailNum = `SELECT email FROM users_active WHERE email="${req.body.email}"`;
