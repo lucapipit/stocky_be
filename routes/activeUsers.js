@@ -23,6 +23,24 @@ router.get('/allusers', async (req, res) => {
     }
 });
 
+router.get('/users/:id', async (req, res) => {
+    try {
+        const authorization = req.headers.authorization;
+        if (authorization) {
+            const q = `SELECT * FROM users_active WHERE id=${req.params.id}`
+            db.query(q, async (err, data) => {
+                if (err) {
+                    res.status(400).json({ message: err.message, statusCode: 400 });
+                } else {
+                    res.status(200).json(data);
+                }
+            })
+        }
+    } catch (error) {
+        res.status(400).json({ message: error.message, statusCode: 400 });
+    }
+});
+
 router.post('/signin', signinAuth, async (req, res) => {
     try {
         const sameEmailNum = `SELECT email FROM users_active WHERE email="${req.body.email}"`;
