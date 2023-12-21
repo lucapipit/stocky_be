@@ -107,15 +107,15 @@ router.post('/login', loginAuth, async (req, res) => {
                 console.log("Error: ", err, ". An error occurred");
             } else {
                 if (data.length === 1) {
-                    const userPssw = `SELECT pssw FROM users_active WHERE email="${req.body.email}"`;
-                    db.query(userPssw, async (err, data2) => {
+                    const userPsswAndId = `SELECT pssw, id FROM users_active WHERE email="${req.body.email}"`;
+                    db.query(userPsswAndId, async (err, data2) => {
                         if (err) {
                             console.log("Error: ", err, ". An error occurred");
                         } else {
                             if (inputPssw !== data2[0].pssw) {
                                 res.status(401).json({ message: "Credential are not correct!", statusCode: 401 });
                             } else {
-                                const token = jwt.sign({ email: data[0].email }, process.env.JWT_SECRET, { expiresIn: "24h" });
+                                const token = jwt.sign({ email: data[0].email, id: data2[0].id }, process.env.JWT_SECRET, { expiresIn: "24h" });
                                 res.header("Authorization", token).status(200).send({
                                     statusCode: 200,
                                     token,
