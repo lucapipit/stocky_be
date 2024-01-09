@@ -3,6 +3,21 @@ import db from "../db.js";
 import jwt from "jsonwebtoken";
 const router = express.Router();
 
+router.get('/allcounts', async (req, res) => {
+    try {
+        const q = "SELECT COUNT(*) AS mycount FROM announcements";
+        db.query(q, (err, data) => {
+            if (err) {
+                res.status(400).json({ message: err.message });
+            } else {
+                console.log(data);
+                res.status(200).json(data);
+            }
+        })
+    } catch (error) {
+        console.error(error);
+    }
+});
 
 router.get('/allannouncements', async (req, res) => {
     try {
