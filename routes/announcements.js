@@ -1,7 +1,27 @@
 import express from "express";
 import db from "../db.js";
 import jwt from "jsonwebtoken";
+// import multer from "multer";
 const router = express.Router();
+
+
+// const storage= multer.diskStorage({
+//     destination: function(req,file,cb){
+//         cb(null,'.uploads');
+//     },
+//     filename:function(req,file,cb){
+//         return cb(null, `${Date.now()}_${file.originalname}`)
+//     }
+// })
+// const upload =multer({storage:storage})
+
+// router.post('/upload',upload.single('file'),(req,res) =>{
+//     console.log(req.body);
+//     console.log(req.file);
+
+// })
+
+
 
 router.get('/allcounts', async (req, res) => {
     try {
