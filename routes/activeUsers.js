@@ -62,7 +62,8 @@ router.post('/signin', signinAuth, async (req, res) => {
                             zipCode,
                             phone,
                             manufacturer,
-                            dealer
+                            dealer,
+                            interests
                             )VALUES (
                             "${req.body.companyName}", 
                             "${req.body.email}", 
@@ -73,7 +74,8 @@ router.post('/signin', signinAuth, async (req, res) => {
                             "${req.body.zipCode}", 
                             "${req.body.phone}", 
                             "${req.body.manufacturer}", 
-                            "${req.body.dealer}")`;
+                            "${req.body.dealer}",
+                            "${req.body.interests}")`;
 
                     db.query(sqlPost, (err, data) => {
                         if (err) {
@@ -107,15 +109,15 @@ router.post('/login', loginAuth, async (req, res) => {
                 console.log("Error: ", err, ". An error occurred");
             } else {
                 if (data.length === 1) {
-                    const userPsswAndId = `SELECT pssw, id FROM users_active WHERE email="${req.body.email}"`;
-                    db.query(userPsswAndId, async (err, data2) => {
+                    const psswIdAndInterests = `SELECT pssw, id, interests FROM users_active WHERE email="${req.body.email}"`;
+                    db.query(psswIdAndInterests, async (err, data2) => {
                         if (err) {
                             console.log("Error: ", err, ". An error occurred");
                         } else {
                             if (inputPssw !== data2[0].pssw) {
                                 res.status(401).json({ message: "Credential are not correct!", statusCode: 401 });
                             } else {
-                                const token = jwt.sign({ email: data[0].email, id: data2[0].id }, process.env.JWT_SECRET, { expiresIn: "24h" });
+                                const token = jwt.sign({ email: data[0].email, id: data2[0].id, interests: data2[0].interests }, process.env.JWT_SECRET, { expiresIn: "24h" });
                                 res.header("Authorization", token).status(200).send({
                                     statusCode: 200,
                                     token,
@@ -146,7 +148,8 @@ router.patch('/editaccount', async (req, res) => {
                         zipCode = "${req.body.zipCode}", 
                         phone = "${req.body.phone}", 
                         manufacturer = "${req.body.manufacturer}",
-                        dealer = "${req.body.dealer}"
+                        dealer = "${req.body.dealer}",
+                        interests = "${req.body.interests}"
                         WHERE 
                         id=${req.body.id}`;
 

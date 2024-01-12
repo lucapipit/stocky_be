@@ -30,8 +30,7 @@ router.get('/allcounts', async (req, res) => {
             if (err) {
                 res.status(400).json({ message: err.message });
             } else {
-                console.log(data);
-                res.status(200).json(data);
+                res.status(200).json(data[0].mycount);
             }
         })
     } catch (error) {
@@ -169,6 +168,28 @@ router.get('/announcement/:id', async (req, res) => {
                     res.status(400).json({ message: err.message });
                 } else {
                     res.status(200).json(data);
+                }
+            })
+        }
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+}
+);
+
+router.get('/announcementsbyinterests/:interests', async (req, res) => {
+    try {
+        const authorization = req.headers.authorization;
+        if (authorization) {
+            /* const {interests} = req.query */
+            const myParam = req.params.interests.split("-").map((el)=>`'${el}'`).join(",");
+            const q = `SELECT * FROM announcements WHERE category in (${myParam})`
+            db.query(q, async (err, data) => {
+                if (err) {
+                    res.status(400).json({ message: err.message });
+                } else {
+
+                    res.status(200).json({data: data, count: data.length});
                 }
             })
         }
