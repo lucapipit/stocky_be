@@ -188,7 +188,6 @@ router.get('/announcementsbyinterests/:interests', async (req, res) => {
                 if (err) {
                     res.status(400).json({ message: err.message });
                 } else {
-
                     res.status(200).json({data: data, count: data.length});
                 }
             })
