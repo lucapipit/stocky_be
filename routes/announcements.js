@@ -1,25 +1,33 @@
 import express from "express";
 import db from "../db.js";
 import jwt from "jsonwebtoken";
-// import multer from "multer";
+import formAnnouncementAuth from "../middlewares/formAnnouncementAuth.js";
+import multer from 'multer';
 const router = express.Router();
 
 
-// const storage= multer.diskStorage({
-//     destination: function(req,file,cb){
-//         cb(null,'.uploads');
-//     },
-//     filename:function(req,file,cb){
-//         return cb(null, `${Date.now()}_${file.originalname}`)
-//     }
-// })
-// const upload =multer({storage:storage})
+const internalStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/images');
+    },
+    filename: (req, file, cb) => {
+        cb(null, `${Date.now()}_${file.originalname}`)
+    }
+})
+const upload = multer({ storage: internalStorage })
 
-// router.post('/upload',upload.single('file'),(req,res) =>{
-//     console.log(req.body);
-//     console.log(req.file);
-
-// })
+router.post('/upload', upload.single('img'), async (req, res) => {
+    
+    console.log(req.file.filename);
+    try {
+        res.status(200).json({ imgName: req.file.filename })
+    } catch (error) {
+        res.status(500).send({
+            statusCode: 500,
+            message: "there are problems!!!"
+        })
+    }
+})
 
 
 
@@ -97,7 +105,7 @@ router.post('/createannouncement', async (req, res) => {
                 res.status(400).json({ message: err.message });
             } else {
                 console.log("Succesfully insert into db!");
-                res.status(200).json({ message: "Annuncio succesfully created" });
+                res.status(200).json({ message: "Annuncio succesfully created", statusCode: 200 });
             }
         })
     } catch (error) {
@@ -182,13 +190,13 @@ router.get('/announcementsbyinterests/:interests', async (req, res) => {
         const authorization = req.headers.authorization;
         if (authorization) {
             /* const {interests} = req.query */
-            const myParam = req.params.interests.split("-").map((el)=>`'${el}'`).join(",");
+            const myParam = req.params.interests.split("-").map((el) => `'${el}'`).join(",");
             const q = `SELECT * FROM announcements WHERE category in (${myParam})`
             db.query(q, async (err, data) => {
                 if (err) {
                     res.status(400).json({ message: err.message });
                 } else {
-                    res.status(200).json({data: data, count: data.length});
+                    res.status(200).json({ data: data, count: data.length });
                 }
             })
         }

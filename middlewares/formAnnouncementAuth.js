@@ -1,4 +1,4 @@
-const formAuth = (req, res, next) => {
+const formAnnouncementAuth = (req, res, next) => {
     const {
         brandName,
         manufacturerName,
@@ -74,7 +74,7 @@ const formAuth = (req, res, next) => {
         next()
     }
 }
-export default formAuth;
+export default formAnnouncementAuth;
 
 
 
@@ -85,7 +85,7 @@ export default formAuth;
 //     return null;
 // };
 
-// const formAuth = (req, res, next) => {
+// const formAnnouncementAuth = (req, res, next) => {
 //     const {
 //         brandName,
 //         manufacturerName,
