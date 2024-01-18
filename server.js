@@ -1,6 +1,7 @@
 import express from "express";
 import cors from 'cors';
 const app = express();
+
 //routes
 import activeUsers from './routes/activeUsers.js';
 import announcements from './routes/announcements.js';
@@ -13,6 +14,7 @@ app.use(express.json());
 app.use(cors());
 
 //routes
+app.use("/uploads", express.static("uploads"));
 app.use('/', activeUsers);
 app.use('/', announcements);
 app.use('/', professionals);
