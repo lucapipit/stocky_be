@@ -8,19 +8,18 @@ const router = express.Router();
 
 const internalStorage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'uploads/images');
+        cb(null, "uploads");
     },
     filename: (req, file, cb) => {
-        cb(null, `${Date.now()}_${file.originalname}`)
+        cb(null, `${Date.now()}.${file.originalname.split(".")[1]}`)
     }
 })
 const upload = multer({ storage: internalStorage })
 
-router.post('/upload', upload.single('img'), async (req, res) => {
+router.post('/fileupload', upload.single('img'), async (req, res) => {
     
-    console.log(req.file.filename);
     try {
-        res.status(200).json({ imgName: req.file.filename })
+        res.status(200).json({ img: req.file.filename })
     } catch (error) {
         res.status(500).send({
             statusCode: 500,

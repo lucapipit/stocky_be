@@ -18,6 +18,7 @@ app.use(cors());
 
 
 //routes
+app.use("/uploads", express.static("uploads"));
 app.use('/', activeUsers);
 app.use('/',  announcements);
 app.use('/', professionals);
