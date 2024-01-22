@@ -42,11 +42,11 @@ const formAnnouncementAuth = (req, res, next) => {
     if (typeof category !== "string") {
         errors.push("category must be a string! ")
     }
-    if (typeof price !== "number") {
-        errors.push("price must be a integer! ")
+    if (typeof price !== "number" || isNaN(price)) {
+        errors.push("price must be a number! ")
     }
-    if (!Number.isInteger(quantity)) {
-        errors.push("quantity must be an integer!");
+    if (typeof quantity !== "number"|| isNaN(quantity)) {
+   errors.push("quantity must be valid  number!");
     }
     if (typeof expireDate !== "object" || !(expireDate instanceof Date)) {
         errors.push("expire date must be a date! ")

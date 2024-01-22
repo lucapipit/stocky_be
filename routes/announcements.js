@@ -1,6 +1,6 @@
 import express from "express";
 import db from "../db.js";
-import jwt from "jsonwebtoken";
+
 import formAnnouncementAuth from "../middlewares/formAnnouncementAuth.js";
 import multer from 'multer';
 const router = express.Router();
@@ -60,7 +60,7 @@ router.get('/allannouncements', async (req, res) => {
     }
 });
 
-router.post('/createannouncement', async (req, res) => {
+router.post('/createannouncement',formAnnouncementAuth,  async (req, res) => {
     try {
         const sqlPost = `INSERT INTO announcements (
             idOwner,
