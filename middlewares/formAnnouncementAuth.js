@@ -48,7 +48,6 @@ const formAnnouncementAuth = (req, res, next) => {
     if (!Number.isInteger(quantity)) {
         errors.push("quantity must be an integer!");
     }
-    
     if (typeof expireDate !== "object" || !(expireDate instanceof Date)) {
         errors.push("expire date must be a date! ")
     }
