@@ -6,6 +6,7 @@ const app = express();
 import activeUsers from './routes/activeUsers.js';
 import announcements from './routes/announcements.js';
 import professionals from './routes/professionals.js';
+import paymentAnnouncement from './routes/paymentAnnouncement.js';
 
 
 
@@ -21,6 +22,7 @@ app.use(cors());
 app.use("/uploads", express.static("uploads"));
 app.use('/', activeUsers);
 app.use('/',  announcements);
+app.use('/', paymentAnnouncement);
 app.use('/', professionals);
 
 
