@@ -42,29 +42,11 @@ const formAnnouncementAuth = (req, res, next) => {
     if (typeof category !== "string") {
         errors.push("category must be a string! ")
     }
-    if (typeof price !== "number" || isNaN(price)) {
-        errors.push("price must be a number! ")
-    }
-    if (typeof quantity !== "number"|| isNaN(quantity)) {
-   errors.push("quantity must be valid  number!");
-    }
-    if (typeof expireDate !== "object" || !(expireDate instanceof Date)) {
-        errors.push("expire date must be a date! ")
-    }
     if (typeof textFocus !== "string") {
         errors.push("text focus must be a string! ")
     }
     if (typeof picsFocus !== "string") {
         errors.push("pics focus must be a string! ")
-    }
-    if (typeof views !== "string") {
-        errors.push("views must be a string! ")
-    }
-    if (typeof posClick !== "string") {
-        errors.push("pos click must be a string! ")
-    }
-    if (typeof negClick !== "string") {
-        errors.push("neg click must be a string! ")
     }
     if(errors.length > 0){
         res.status(401).json({ message: errors, statusCode: 401 })
