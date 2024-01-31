@@ -8,6 +8,7 @@ import announcements from './routes/announcements.js';
 import professionals from './routes/professionals.js';
 import paymentAnnouncement from './routes/paymentAnnouncement.js';
 import paypalPayment from './routes/paypalPayment.js';
+import pendingAnnouncements from './routes/pendingAnnouncements.js';
 
 
 const port = 5050;
@@ -19,7 +20,8 @@ app.use(cors());
 //routes
 app.use("/uploads", express.static("uploads"));
 app.use('/', activeUsers);
-app.use('/',  announcements);
+app.use('/', announcements);
+app.use('/', pendingAnnouncements);
 app.use('/', paymentAnnouncement);
 app.use('/', professionals);
 app.use('/', paypalPayment);

@@ -60,10 +60,13 @@ router.get('/allannouncements', async (req, res) => {
     }
 });
 
-router.post('/createannouncement',formAnnouncementAuth,  async (req, res) => {
+router.post('/createannouncement', formAnnouncementAuth,  async (req, res) => {
     try {
         const sqlPost = `INSERT INTO announcements (
             idOwner,
+            idPackage,
+            status,
+            relevance,
             brandName,
             manufacturerName,
             modelName,
@@ -81,6 +84,9 @@ router.post('/createannouncement',formAnnouncementAuth,  async (req, res) => {
             posClick,
             negClick)VALUES(
             '${req.body.idOwner}', 
+            '${req.body.idPackage}', 
+            '${req.body.status}', 
+            '${req.body.relevance}', 
             '${req.body.brandName}', 
             '${req.body.manufacturerName}', 
             '${req.body.modelName}', 
