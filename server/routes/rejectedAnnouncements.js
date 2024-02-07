@@ -2,37 +2,13 @@ import express from "express";
 import db from "../db.js";
 
 import formAnnouncementAuth from "../middlewares/formAnnouncementAuth.js";
-import multer from 'multer';
 const router = express.Router();
 
 
-const internalStorage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, "uploads");
-    },
-    filename: (req, file, cb) => {
-        cb(null, `${Date.now()}.${file.originalname.split(".")[1]}`)
-    }
-})
-const upload = multer({ storage: internalStorage })
 
-router.post('/pen-fileupload', upload.single('img'), async (req, res) => {
-    
+router.get('/rej-allcounts', async (req, res) => {
     try {
-        res.status(200).json({ img: req.file.filename })
-    } catch (error) {
-        res.status(500).send({
-            statusCode: 500,
-            message: "there are problems!!!"
-        })
-    }
-})
-
-
-
-router.get('/pen-allcounts', async (req, res) => {
-    try {
-        const q = "SELECT COUNT(*) AS mycount FROM pending_announcements";
+        const q = "SELECT COUNT(*) AS mycount FROM rejected_announcements";
         db.query(q, (err, data) => {
             if (err) {
                 res.status(400).json({ message: err.message });
@@ -45,9 +21,9 @@ router.get('/pen-allcounts', async (req, res) => {
     }
 });
 
-router.get('/pen-allannouncements', async (req, res) => {
+router.get('/rej-allannouncements', async (req, res) => {
     try {
-        const q = "SELECT * FROM pending_announcements";
+        const q = "SELECT * FROM rejected_announcements";
         db.query(q, (err, data) => {
             if (err) {
                 res.status(400).json({ message: err.message });
@@ -60,9 +36,9 @@ router.get('/pen-allannouncements', async (req, res) => {
     }
 });
 
-router.post('/pen-createannouncement', formAnnouncementAuth,  async (req, res) => {
+router.post('/rej-createannouncement', formAnnouncementAuth,  async (req, res) => {
     try {
-        const sqlPost = `INSERT INTO pending_announcements (
+        const sqlPost = `INSERT INTO rejected_announcements (
             idOwner,
             idPackage,
             status,
@@ -119,9 +95,9 @@ router.post('/pen-createannouncement', formAnnouncementAuth,  async (req, res) =
 }
 );
 
-router.delete('/pen-deleteannouncement/:id', async (req, res) => {
+router.delete('/rej-deleteannouncement/:id', async (req, res) => {
     try {
-        const sqlPost = `DELETE FROM pending_announcements WHERE id = '${req.params.id}'`
+        const sqlPost = `DELETE FROM rejected_announcements WHERE id = '${req.params.id}'`
         db.query(sqlPost, (err, data) => {
             if (err) {
                 console.log("Error: ", err, ". An error occurred");
@@ -137,9 +113,9 @@ router.delete('/pen-deleteannouncement/:id', async (req, res) => {
 }
 );
 
-router.patch('/updatepen-announcement', async (req, res) => {
+router.patch('/updaterej-announcement', async (req, res) => {
     try {
-        const sqlPost = `UPDATE pending_announcements SET 
+        const sqlPost = `UPDATE rejected_announcements SET 
         brandName = '${req.body.brandName}', 
         status = '${req.body.status}',
         manufacturerName = '${req.body.manufacturerName}', 
@@ -172,11 +148,11 @@ router.patch('/updatepen-announcement', async (req, res) => {
 }
 );
 
-router.get('/pen-announcement/:id', async (req, res) => {
+router.get('/rej-announcement/:id', async (req, res) => {
     try {
         const authorization = req.headers.authorization;
         if (authorization) {
-            const q = `SELECT * FROM pending_announcements WHERE id = '${req.params.id}'`
+            const q = `SELECT * FROM rejected_announcements WHERE id = '${req.params.id}'`
             db.query(q, async (err, data) => {
                 if (err) {
                     res.status(400).json({ message: err.message });
@@ -191,26 +167,6 @@ router.get('/pen-announcement/:id', async (req, res) => {
 }
 );
 
-router.get('/pen-announcementsbyinterests/:interests', async (req, res) => {
-    try {
-        const authorization = req.headers.authorization;
-        if (authorization) {
-            /* const {interests} = req.query */
-            const myParam = req.params.interests.split("-").map((el) => `'${el}'`).join(",");
-            const q = `SELECT * FROM pending_announcements WHERE category in (${myParam})`
-            db.query(q, async (err, data) => {
-                if (err) {
-                    res.status(400).json({ message: err.message });
-                } else {
-                    res.status(200).json({ data: data, count: data.length });
-                }
-            })
-        }
-    } catch (error) {
-        res.status(400).json({ message: error.message });
-    }
-}
-);
 
 export default router;
 
