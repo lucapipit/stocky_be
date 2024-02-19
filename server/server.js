@@ -10,6 +10,8 @@ import paymentAnnouncement from './routes/paymentAnnouncement.js';
 import paypalPayment from './routes/paypalPayment.js';
 import pendingAnnouncements from './routes/pendingAnnouncements.js';
 import rejectedAnnouncements from './routes/rejectedAnnouncements.js';
+import email from "./middlewares/sendNail.js";
+
 
 
 const port = 5050;
@@ -27,6 +29,8 @@ app.use('/', rejectedAnnouncements);
 app.use('/', paymentAnnouncement);
 app.use('/', professionals);
 app.use('/', paypalPayment);
+app.use('/', email);
+
 
 
 app.listen(port, () => {console.log(`Server running on port ${port}`)});
