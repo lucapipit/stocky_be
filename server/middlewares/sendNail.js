@@ -8,11 +8,11 @@ import nodeMailer from 'nodemailer';
 const transporter = nodeMailer.createTransport({
    
     host: 'smtp.live.com',
-    port: 465,
-    secure: false,
+    port: 25,
+    secure: true,
     auth: {
         user: 'ouzinnbis@hotmail.it',
-        pass: 'Lifofifo11?'
+        pass: 'Lifofifo11!?'
     }
 });
 
@@ -20,8 +20,8 @@ router.post('/sendemail', async (req, res) => {
     const { name, email, message } = req.body;
 
     const mailOptions = {
-        from: 'mbengueousseynou143@gmail.com',
-        to: 'ouzinnbis@hotmail.it',
+        from:'ouzinnbis@hotmail.it' ,
+        to: 'mbengueousseynou143@gmail.com',
         subject: `New message from ${name} (${email})`,
         text: message
     };

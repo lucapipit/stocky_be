@@ -7,7 +7,7 @@ const loginAuth = (req, res, next) => {
     if (typeof email !== "string" || !validEmail()) {
         errors.push("email is not valid! ")
     }
-    if (pssw.length < 7) {
+    if (pssw.length < 6) {
         errors.push("password must be longer than 6 characters! ")
     }
     if (errors.length > 0) {

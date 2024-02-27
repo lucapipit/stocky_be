@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import loginAuth from "../middlewares/loginAuth.js";
 import signinAuth from "../middlewares/signinAuth.js";
 const router = express.Router();
+import bcrypt from "bcryptjs";
 
 router.get('/allusers', async (req, res) => {
     try {
@@ -51,6 +52,9 @@ router.post('/signin', signinAuth, async (req, res) => {
             } else {
 
                 if (data.length === 0) {
+                      // Crittografa la password prima di salvarla nel database
+                      const hashedPassword = await bcrypt.hash(req.body.pssw, 10); // 10 è il costo del lavoro
+
 
                     const sqlPost = `INSERT INTO users_active (
                             companyName,
@@ -67,7 +71,7 @@ router.post('/signin', signinAuth, async (req, res) => {
                             )VALUES (
                             "${req.body.companyName}", 
                             "${req.body.email}", 
-                            "${req.body.pssw}",
+                            "${hashedPassword}", 
                             "${req.body.country}", 
                             "${req.body.address}", 
                             "${req.body.city}", 
