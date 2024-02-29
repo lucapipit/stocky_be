@@ -104,7 +104,9 @@ router.post('/signin', signinAuth, async (req, res) => {
 );
 
 router.post('/login', loginAuth, async (req, res) => {
-    
+
+   
+
     try {
         const inputPssw = req.body.pssw;
         const sameEmailNum = `SELECT email FROM users_active WHERE email="${req.body.email}"`;
@@ -118,27 +120,37 @@ router.post('/login', loginAuth, async (req, res) => {
                         if (err) {
                             console.log("Error: ", err, ". An error occurred");
                         } else {
-                            if (inputPssw !== data2[0].pssw) {
-                                res.status(401).json({ message: "Credential are not correct!", statusCode: 401 });
+                            if (data2.length === 1) {
+                                const hashedPassword = data2[0].pssw;
+                                bcrypt.compare(inputPssw, hashedPassword, (err, result) => {
+                                    if (err || !result) {
+                                        res.status(401).json({ message: "Credentials are not correct!", statusCode: 401 });
+                                    } else {
+                                        const token = jwt.sign({ email: data[0].email, id: data2[0].id, interests: data2[0].interests }, process.env.JWT_SECRET, { expiresIn: "24h" });
+                                        res.header("Authorization", token).status(200).send({
+                                            statusCode: 200,
+                                            token,
+                                            message: "Successfully logged in!"
+                                        });
+                                    }
+                                });
                             } else {
-                                const token = jwt.sign({ email: data[0].email, id: data2[0].id, interests: data2[0].interests }, process.env.JWT_SECRET, { expiresIn: "24h" });
-                                res.header("Authorization", token).status(200).send({
-                                    statusCode: 200,
-                                    token,
-                                    message: "Succesfully login!"
-                                })
+                                res.status(401).json({ message: "Credentials are not correct!", statusCode: 401 });
                             }
                         }
-                    })
+                    });
                 } else {
-                    res.status(401).json({ message: "Credential are not correct!", statusCode: 401 });
+                    res.status(401).json({ message: "Credentials are not correct!", statusCode: 401 });
                 }
             }
-        })
+        });
     } catch (error) {
-        console.error(error)
+        console.error(error);
     }
-});
+    
+
+    
+ });
 
 router.patch('/editaccount', async (req, res) => {
     try {
