@@ -17,7 +17,7 @@ const internalStorage = multer.diskStorage({
 const upload = multer({ storage: internalStorage })
 
 router.post('/fileupload', upload.single('img'), async (req, res) => {
-    
+
     try {
         res.status(200).json({ img: req.file.filename })
     } catch (error) {
@@ -60,7 +60,45 @@ router.get('/allannouncements', async (req, res) => {
     }
 });
 
-router.post('/createannouncement', formAnnouncementAuth,  async (req, res) => {
+router.get('/announcement/:id', async (req, res) => {
+    try {
+        const authorization = req.headers.authorization;
+        if (authorization) {
+            const q = `SELECT * FROM announcements WHERE id = '${req.params.id}'`
+            db.query(q, async (err, data) => {
+                if (err) {
+                    res.status(400).json({ message: err.message });
+                } else {
+                    res.status(200).json(data);
+                }
+            })
+        }
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+}
+);
+
+router.get('/allannouncements/:idowner', async (req, res) => {
+    try {
+        const authorization = req.headers.authorization;
+        if (authorization) {
+            const q = `SELECT * FROM announcements WHERE idOwner = '${req.params.idowner}'`
+            db.query(q, async (err, data) => {
+                if (err) {
+                    res.status(400).json({ message: err.message });
+                } else {
+                    res.status(200).json({ message: 200, payload: data });
+                }
+            })
+        }
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+}
+);
+
+router.post('/createannouncement', formAnnouncementAuth, async (req, res) => {
     try {
         const sqlPost = `INSERT INTO announcements (
             idOwner,
@@ -167,25 +205,6 @@ router.patch('/updateannouncement', async (req, res) => {
         })
     } catch (error) {
         console.error(error)
-    }
-}
-);
-
-router.get('/announcement/:id', async (req, res) => {
-    try {
-        const authorization = req.headers.authorization;
-        if (authorization) {
-            const q = `SELECT * FROM announcements WHERE id = '${req.params.id}'`
-            db.query(q, async (err, data) => {
-                if (err) {
-                    res.status(400).json({ message: err.message });
-                } else {
-                    res.status(200).json(data);
-                }
-            })
-        }
-    } catch (error) {
-        res.status(400).json({ message: error.message });
     }
 }
 );

@@ -36,7 +36,7 @@ router.get('/rej-allannouncements', async (req, res) => {
     }
 });
 
-router.post('/rej-createannouncement', formAnnouncementAuth,  async (req, res) => {
+router.post('/rej-createannouncement', formAnnouncementAuth, async (req, res) => {
     try {
         const sqlPost = `INSERT INTO rejected_announcements (
             idOwner,
@@ -148,16 +148,16 @@ router.patch('/updaterej-announcement', async (req, res) => {
 }
 );
 
-router.get('/rej-announcement/:id', async (req, res) => {
+router.get('/rej-announcement/:idowner', async (req, res) => {
     try {
         const authorization = req.headers.authorization;
         if (authorization) {
-            const q = `SELECT * FROM rejected_announcements WHERE id = '${req.params.id}'`
+            const q = `SELECT * FROM rejected_announcements WHERE idOwner = '${req.params.idowner}'`
             db.query(q, async (err, data) => {
                 if (err) {
                     res.status(400).json({ message: err.message });
                 } else {
-                    res.status(200).json(data);
+                    res.status(200).json({ message: 200, payload: data });
                 }
             })
         }

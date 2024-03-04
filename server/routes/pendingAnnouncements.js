@@ -172,16 +172,16 @@ router.patch('/updatepen-announcement', async (req, res) => {
 }
 );
 
-router.get('/pen-announcement/:id', async (req, res) => {
+router.get('/pen-announcement/:idowner', async (req, res) => {
     try {
         const authorization = req.headers.authorization;
         if (authorization) {
-            const q = `SELECT * FROM pending_announcements WHERE id = '${req.params.id}'`
+            const q = `SELECT * FROM pending_announcements WHERE idOwner='${req.params.idowner}'`
             db.query(q, async (err, data) => {
                 if (err) {
                     res.status(400).json({ message: err.message });
                 } else {
-                    res.status(200).json(data);
+                    res.status(200).json({message: 200, payload: data});
                 }
             })
         }
