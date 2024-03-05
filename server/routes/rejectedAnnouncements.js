@@ -42,6 +42,7 @@ router.post('/rej-createannouncement', formAnnouncementAuth, async (req, res) =>
             idOwner,
             idPackage,
             status,
+            rejReasons,
             relevance,
             brandName,
             manufacturerName,
@@ -62,6 +63,7 @@ router.post('/rej-createannouncement', formAnnouncementAuth, async (req, res) =>
             '${req.body.idOwner}', 
             '${req.body.idPackage}', 
             '${req.body.status}', 
+            '${req.body.rejReasons}', 
             '${req.body.relevance}', 
             '${req.body.brandName}', 
             '${req.body.manufacturerName}', 
@@ -146,7 +148,7 @@ router.patch('/updaterej-announcement', async (req, res) => {
         console.error(error)
     }
 }
-);
+);/* aggiungere il campo rejReasons */
 
 router.get('/rej-announcement/:idowner', async (req, res) => {
     try {
