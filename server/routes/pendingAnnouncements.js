@@ -47,7 +47,7 @@ router.get('/pen-allcounts', async (req, res) => {
 
 router.get('/pen-allannouncements', async (req, res) => {
     try {
-        const q = "SELECT * FROM pending_announcements";
+        const q = "SELECT * FROM pending_announcements_users";
         db.query(q, (err, data) => {
             if (err) {
                 res.status(400).json({ message: err.message });

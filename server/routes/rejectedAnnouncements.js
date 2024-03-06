@@ -23,7 +23,7 @@ router.get('/rej-allcounts', async (req, res) => {
 
 router.get('/rej-allannouncements', async (req, res) => {
     try {
-        const q = "SELECT * FROM rejected_announcements";
+        const q = "SELECT * FROM rejected_announcements_users";
         db.query(q, (err, data) => {
             if (err) {
                 res.status(400).json({ message: err.message });
