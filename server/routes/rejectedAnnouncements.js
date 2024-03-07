@@ -115,7 +115,7 @@ router.delete('/rej-deleteannouncement/:id', async (req, res) => {
 }
 );
 
-router.patch('/updaterej-announcement', async (req, res) => {
+router.patch('/updaterej-announcement/:id', async (req, res) => {
     try {
         const sqlPost = `UPDATE rejected_announcements SET 
         brandName = '${req.body.brandName}', 
@@ -133,7 +133,7 @@ router.patch('/updaterej-announcement', async (req, res) => {
         textFocus = '${req.body.textFocus}',
         picsFocus = '${req.body.picsFocus}' 
         WHERE 
-        id = '${req.body.id}'`
+        id = '${req.params.id}'`
 
         db.query(sqlPost, (err, data) => {
             if (err) {

@@ -66,6 +66,7 @@ router.post('/pen-createannouncement', formAnnouncementAuth,  async (req, res) =
             idOwner,
             idPackage,
             status,
+            rejReasons,
             relevance,
             brandName,
             manufacturerName,
@@ -86,6 +87,7 @@ router.post('/pen-createannouncement', formAnnouncementAuth,  async (req, res) =
             '${req.body.idOwner}', 
             '${req.body.idPackage}', 
             '${req.body.status}', 
+            '${req.body.rejReasons}', 
             '${req.body.relevance}', 
             '${req.body.brandName}', 
             '${req.body.manufacturerName}', 
@@ -137,7 +139,7 @@ router.delete('/pen-deleteannouncement/:id', async (req, res) => {
 }
 );
 
-router.patch('/updatepen-announcement', async (req, res) => {
+router.patch('/updatepen-announcement/:id', async (req, res) => {
     try {
         const sqlPost = `UPDATE pending_announcements SET 
         brandName = '${req.body.brandName}', 
@@ -155,7 +157,7 @@ router.patch('/updatepen-announcement', async (req, res) => {
         textFocus = '${req.body.textFocus}',
         picsFocus = '${req.body.picsFocus}' 
         WHERE 
-        id = '${req.body.id}'`
+        id = '${req.params.id}'`
 
         db.query(sqlPost, (err, data) => {
             if (err) {
