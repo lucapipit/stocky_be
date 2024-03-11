@@ -1,6 +1,5 @@
 import express from "express";
 import db from "../db.js";
-
 import formAnnouncementAuth from "../middlewares/formAnnouncementAuth.js";
 import multer from 'multer';
 const router = express.Router();
@@ -11,12 +10,31 @@ const internalStorage = multer.diskStorage({
         cb(null, "uploads");
     },
     filename: (req, file, cb) => {
-        cb(null, `${Date.now()}.${file.originalname.split(".")[1]}`)
+        cb(null, `_test${Date.now()}.${file.originalname.split(".")[1]}`)
     }
 })
 const upload = multer({ storage: internalStorage })
 
-router.post('/fileupload', upload.single('img'), async (req, res) => {
+router.post('/fileupload', /* upload.single('img') */upload.array("img", 8), async (req, res) => {
+    console.log(req.files[1].filename);
+    const fileNameArray = [];
+
+    [...Array(req.files.length)].map((el, index)=>{
+        fileNameArray.push(`${req.files[index].filename}`);
+        console.log(fileNameArray);
+    })
+
+    try {
+        res.status(200).json({ img: fileNameArray.toString() })
+    } catch (error) {
+        res.status(500).send({
+            statusCode: 500,
+            message: "there are problems!!!"
+        })
+    }
+})
+
+/* router.post('/fileupload', upload.single('img') , async (req, res) => {
 
     try {
         res.status(200).json({ img: req.file.filename })
@@ -26,8 +44,7 @@ router.post('/fileupload', upload.single('img'), async (req, res) => {
             message: "there are problems!!!"
         })
     }
-})
-
+}) */
 
 
 router.get('/allcounts', async (req, res) => {
