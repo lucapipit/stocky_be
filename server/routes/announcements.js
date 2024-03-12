@@ -2,6 +2,7 @@ import express from "express";
 import db from "../db.js";
 import formAnnouncementAuth from "../middlewares/formAnnouncementAuth.js";
 import multer from 'multer';
+import fs from "fs";
 const router = express.Router();
 
 
@@ -16,12 +17,10 @@ const internalStorage = multer.diskStorage({
 const upload = multer({ storage: internalStorage })
 
 router.post('/fileupload', /* upload.single('img') */upload.array("img", 8), async (req, res) => {
-    console.log(req.files[1].filename);
     const fileNameArray = [];
 
-    [...Array(req.files.length)].map((el, index)=>{
-        fileNameArray.push(`${req.files[index].filename}`);
-        console.log(fileNameArray);
+    [...Array(req.files.length)].map((el, index) => {
+        fileNameArray.push(`${req.files[index].filename}`)
     })
 
     try {
@@ -31,6 +30,19 @@ router.post('/fileupload', /* upload.single('img') */upload.array("img", 8), asy
             statusCode: 500,
             message: "there are problems!!!"
         })
+    }
+})
+
+router.delete('/del-fileupload/:idfilename', async (req, res) => {
+
+    try {
+        fs.unlink(`uploads/${req.params.idfilename}`, (err) => {
+            if (err) throw err;
+            console.log('path/file.txt was deleted');
+        })
+        res.status(200).json({ message: "Image succesfully deleted", statusCode: 200 })
+    } catch (error) {
+        res.status(400).send({ message: error, statusCode: 400 })
     }
 })
 
