@@ -11,14 +11,14 @@ const internalStorage = multer.diskStorage({
         cb(null, "uploads");
     },
     filename: (req, file, cb) => {
-        cb(null, `_test${Date.now()}.${file.originalname.split(".")[1]}`)
+        cb(null, `_test${Date.now()}_$_${file.originalname.split(".")[0]}.${file.originalname.split(".")[1].toLowerCase()}`)
     }
 })
 const upload = multer({ storage: internalStorage })
 
 router.post('/fileupload', /* upload.single('img') */upload.array("img", 8), async (req, res) => {
     const fileNameArray = [];
-
+    console.log(req.files);
     [...Array(req.files.length)].map((el, index) => {
         fileNameArray.push(`${req.files[index].filename}`)
     })
@@ -228,7 +228,6 @@ router.patch('/updateannouncement', async (req, res) => {
                 console.log("Error: ", err, ". An error occurred");
                 res.status(400).json({ message: err.message });
             } else {
-                console.log("Succesfully update db!");
                 res.status(200).json({ message: "Annuncio succesfully updated" });
             }
         })
