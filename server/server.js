@@ -8,8 +8,6 @@ import announcements from './routes/announcements.js';
 import professionals from './routes/professionals.js';
 import paymentAnnouncement from './routes/paymentAnnouncement.js';
 import paypalPayment from './routes/paypalPayment.js';
-import pendingAnnouncements from './routes/pendingAnnouncements.js';
-import rejectedAnnouncements from './routes/rejectedAnnouncements.js';
 import email from "./middlewares/sendNail.js";
 
 
@@ -24,8 +22,6 @@ app.use(cors());
 app.use("/uploads", express.static("uploads"));
 app.use('/', activeUsers);
 app.use('/', announcements);
-app.use('/', pendingAnnouncements);
-app.use('/', rejectedAnnouncements);
 app.use('/', paymentAnnouncement);
 app.use('/', professionals);
 app.use('/', paypalPayment);
